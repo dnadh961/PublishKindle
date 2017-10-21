@@ -41,6 +41,22 @@ public class GenericKeywords {
 			e.printStackTrace();
 		}
 	}
+	
+	public void logout(){
+		driver.findElement(By.linkText("Sign out")).click();
+		WaitHandler.waitForPageLoaded(driver);
+		driver.close();
+		driver.quit();
+	}
+	
+	public void login(){
+		openBrowser();
+		navigate("amazon_url");
+		click("signin_button_id");
+		input("email_field_id", "username");
+		input("password_field_id", "password");
+		click("signinwith_credentials_button_id");
+	}
 
 	public void openBrowser() {
 		String browserType = prop.getProperty("browser_type");
@@ -151,6 +167,11 @@ public class GenericKeywords {
 	public String[] getTitles() {
 		String[] titleList = dataProp.getProperty("titles").split(",");
 		return titleList;
+	}
+	
+	public String[] getDesc() {
+		String[] descList = dataProp.getProperty("descriptions").split(",");
+		return descList;
 	}
 
 	public boolean isElementPresent(String xpath) {

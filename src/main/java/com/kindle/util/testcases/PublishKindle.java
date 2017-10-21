@@ -8,25 +8,22 @@ import com.kindle.util.WaitHandler;
 public class PublishKindle {
 	static String[] authorList;
 	static String[] titleList;
+	static String[] descList;
 	public static void main(String[] args) throws InterruptedException, AWTException {
 		GenericKeywords app=new GenericKeywords();
 		int noofAuthors=app.getNoofAuthors();
 		authorList=app.getAuthors();
 		titleList=app.getTitles();
-		app.openBrowser();
-		app.navigate("amazon_url");
-		app.click("signin_button_id");
-		app.input("email_field_id", "username");
-		app.input("password_field_id", "password");
-		app.click("signinwith_credentials_button_id");
+		descList = app.getDesc();
+		app.login();
 		for(int i=1;i<=noofAuthors;i++){
 			System.out.println("Running foruser:::  "+i);
 			WaitHandler.sleep(2);
 			app.click("kindle_ebook_icon_id");
-			app.write("booktitle_textfield_xpath", "Romance Book");
+			app.write("booktitle_textfield_xpath", titleList[i-1]);
 			app.write("author_firstname_field_xpath",authorList[i-1].split(" ")[0]);
 			app.write("author_lastname_field_xpath", authorList[i-1].split(" ")[1]);
-			app.write("description_field_xpath", "Description1");
+			app.write("description_field_xpath", descList[i-1]);
 			app.click("own_copyright_xpath");
 			app.input("keyword1_xpath", "keyword1");
 			app.input("keyword2_xpath", "keyword2");
@@ -55,6 +52,11 @@ public class PublishKindle {
 			app.waitforElement("//div[@class='a-popover-footer']//span[@id='publish-confirm-popover-digital-close']//input");
 			app.click("test_xpath");
 			app.waitforElement("//*[@id='create-digital-button']");
+			WaitHandler.sleep(3);
+			if(i%10==0){
+				app.logout();
+				app.login();
+			}
 		}
 	}
 }
